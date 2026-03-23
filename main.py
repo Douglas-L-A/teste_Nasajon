@@ -94,35 +94,3 @@ estatisticas = {
 
 municipios_output.to_csv('data/resultados.csv', index=False)
 
-import json
-
-# Converte estatisticas para tipos nativos
-def convert_numpy(obj):
-    if isinstance(obj, dict):
-        return {k: convert_numpy(v) for k, v in obj.items()}
-    elif isinstance(obj, list):
-        return [convert_numpy(v) for v in obj]
-    elif hasattr(obj, "item"):  # numpy scalars
-        return obj.item()
-    else:
-        return obj
-
-estatisticas_json = convert_numpy(estatisticas)
-
-
-PROJECT_FUNCTION_URL="https://mynxlubykylncinttggu.functions.supabase.co/ibge-submit"
-ACCESS_TOKEN="eyJhbGciOiJIUzI1NiIsImtpZCI6ImR0TG03UVh1SkZPVDJwZEciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL215bnhsdWJ5a3lsbmNpbnR0Z2d1LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJhZTc2OWU3MC1kNTFjLTQ1ZGMtYTVmMi1kY2I4NWJhZGE0MGUiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzc0MzAwMzk1LCJpYXQiOjE3NzQyOTY3OTUsImVtYWlsIjoiZC5sZW1vc2FyYXVqbzIwMDFAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6ImQubGVtb3NhcmF1am8yMDAxQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJub21lIjoiRG91Z2xhcyBMZW1vcyBBcmF1am8iLCJwaG9uZV92ZXJpZmllZCI6ZmFsc2UsInN1YiI6ImFlNzY5ZTcwLWQ1MWMtNDVkYy1hNWYyLWRjYjg1YmFkYTQwZSJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6InBhc3N3b3JkIiwidGltZXN0YW1wIjoxNzc0Mjk2Nzk1fV0sInNlc3Npb25faWQiOiI2OWVlMGM5Mi0wMTdjLTRmYjUtYTM1Zi1iZmIzZDgzODBjZDgiLCJpc19hbm9ueW1vdXMiOmZhbHNlfQ.fqaCTjIE564Qi_MxfsK5nmUre-Hms5byPM5c9b99Or0"
-
-headers = {
-    "Authorization": f"Bearer {ACCESS_TOKEN}",
-    "Content-Type": "application/json"
-}
-
-response = requests.post(
-    PROJECT_FUNCTION_URL,
-    json=estatisticas_json,
-    headers=headers
-)
-
-print("Status code:", response.status_code)
-print("Resposta:", response.text)
